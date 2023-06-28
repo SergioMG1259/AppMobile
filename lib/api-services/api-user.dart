@@ -4,7 +4,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ApiUserService {
-  static const String baseUrl = 'http://192.168.100.5:8105/api/v1'; // Reemplaza con la URL base de tu API
+  /*static const String baseUrl = 'http://192.168.100.5:8105/api/v1';*/ // Reemplaza con la URL base de tu API
+
+  static const String baseUrl = 'https://api-erentcar.azurewebsites.net/api/v1';
 
   Future<User> getUser(int id) async {
     final url = Uri.parse('$baseUrl/users/$id');

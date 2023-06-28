@@ -3,7 +3,8 @@ import 'dart:convert';
 
 
 class ApiScoreService {
-  static const String baseUrl = 'http://192.168.100.5:8105/api/v1'; // Reemplaza con la URL base de tu API
+  /*static const String baseUrl = 'http://192.168.100.5:8105/api/v1';*/
+  static const String baseUrl = 'https://api-erentcar.azurewebsites.net/api/v1';
 
 
   Future<bool> scoreToClient(int clientId,int ownerId,String comment, double score) async {

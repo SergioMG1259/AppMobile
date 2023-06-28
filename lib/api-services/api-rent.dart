@@ -5,7 +5,9 @@ import 'dart:convert';
 
 
 class ApiRentService {
-  static const String baseUrl = 'http://192.168.100.5:8105/api/v1'; // Reemplaza con la URL base de tu API
+  /*static const String baseUrl = 'http://192.168.100.5:8105/api/v1';*/
+
+  static const String baseUrl = 'https://api-erentcar.azurewebsites.net/api/v1';
 
   Future<List<RentClient>> getRentsClient(int id) async {
     final url = Uri.parse('$baseUrl/rents/client/$id');

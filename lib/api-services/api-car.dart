@@ -5,7 +5,8 @@ import '../models/car.dart';
 import '../models/car-detail.dart';
 
 class ApiCarService {
-  static const String baseUrl = 'http://192.168.100.5:8105/api/v1';
+  /*static const String baseUrl = 'http://192.168.100.5:8105/api/v1';*/
+  static const String baseUrl = 'https://api-erentcar.azurewebsites.net/api/v1';
 
   Future<List<Car>> getCars() async {
     final url = Uri.parse('$baseUrl/cars');
