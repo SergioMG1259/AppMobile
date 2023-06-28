@@ -1,13 +1,23 @@
+import 'package:e_rent_car/api-services/api-login.dart';
+import 'package:e_rent_car/models/loginModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../models/global.dart';
+
 class LoginScreen extends StatefulWidget {
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
   bool _rememberMe = false;
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final LoginApiService loginApiService=new LoginApiService();
+
 
   Widget _buildEmailTF() {
     return Column(
@@ -41,6 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           height: 60.0,
           child: TextField(
+            controller: _emailController,
             keyboardType: TextInputType.emailAddress,
             style: TextStyle(
               color: Color(0xFF6CA8F1),
@@ -79,6 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: TextField(
+            controller: _passwordController,
             obscureText: true,
             style: TextStyle(
               color: Color(0xFF6CA8F1),
@@ -142,12 +154,37 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  void _handleLogin() async {
+    final email = _emailController.text;
+    final password = _passwordController.text;
+
+    try {
+      final response = await loginApiService.login(email, password);
+      print(response);
+      final userModel = LoginModel.fromJson(response);
+      Globals.userId = userModel.id;
+
+      print(userModel.role);
+      if(userModel.role=="CLIENT")  {
+        Navigator.pushNamed(context, '/client');
+      }
+      else if(userModel.role=="OWNER"){
+        Navigator.pushNamed(context, '/owner');
+      }
+    } catch (e) {
+        print(e);
+    }
+  }
+
+
   Widget _buildLoginBtn() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25.0),
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () => print('Login Button Pressed'),
+        onPressed: () => {
+          _handleLogin()
+        },
         style: ElevatedButton.styleFrom(
           elevation: 5.0,
           padding: EdgeInsets.all(15.0),

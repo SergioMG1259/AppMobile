@@ -1,26 +1,29 @@
-import 'package:e_rent_car/api-services/api-car.dart';
-import 'package:e_rent_car/models/global-car.dart';
+import 'package:e_rent_car/models/global.dart';
 import 'package:flutter/material.dart';
 
+import '../api-services/api-car.dart';
 import '../models/car.dart';
 
-class SearchCarsScreen extends StatefulWidget {
+class MyCarsScreen extends StatefulWidget {
+  const MyCarsScreen({Key? key}) : super(key: key);
+
   @override
-  _SearchCarsScreenState createState() => _SearchCarsScreenState();
+  State<MyCarsScreen> createState() => _MyCarsScreenState();
 }
 
-class _SearchCarsScreenState extends State<SearchCarsScreen> {
+class _MyCarsScreenState extends State<MyCarsScreen> {
+
   final ApiCarService apiCarService=new ApiCarService();
   List<Car> cars = [];
   bool isLoading = true;
   @override
   void initState() {
     super.initState();
-    fetchCars();
+    fetchCarsOwner();
   }
-  Future<void> fetchCars() async {
+  Future<void> fetchCarsOwner() async {
     try {
-      final fetchedCars = await apiCarService.getCars();
+      final fetchedCars = await apiCarService.getCarsOwner(Globals.userId);
       setState(() {
         cars = fetchedCars;
         isLoading = false;
@@ -44,7 +47,7 @@ class _SearchCarsScreenState extends State<SearchCarsScreen> {
           children: [
             SizedBox(height: 40.0),
             Text(
-              'Search Cars',
+              'My Cars',
               style: TextStyle(
                 color: Color(0xFF527DAA),
                 fontFamily: 'OpenSans',
@@ -52,18 +55,40 @@ class _SearchCarsScreenState extends State<SearchCarsScreen> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search',
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+            SizedBox(height: 40.0),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 8.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 40,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/add-car');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF527DAA),
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                        child: Text(
+                          'Add New Car',
+                          style: TextStyle(
+                            color: Colors.white, // Color del texto del botón
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
+            SizedBox(height: 40.0),
             Expanded(
               child: ListView.builder(
                 padding: EdgeInsets.zero,
@@ -81,8 +106,7 @@ class _SearchCarsScreenState extends State<SearchCarsScreen> {
                     ),
                     child: InkWell(
                       onTap: () {
-                        GlobalCar.carId=cars[index].id;
-                        Navigator.pushNamed(context, '/car-details-client');
+
                       },
                       child: Column(
                         children: [

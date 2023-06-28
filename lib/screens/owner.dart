@@ -1,24 +1,24 @@
+import 'package:e_rent_car/screens/my-cars.dart';
 import 'package:e_rent_car/screens/profile.dart';
-import 'package:e_rent_car/screens/rents-client.dart';
-import 'package:e_rent_car/screens/reservations-client.dart';
+import 'package:e_rent_car/screens/rents-owner.dart';
+import 'package:e_rent_car/screens/reservations-owner.dart';
 import 'package:flutter/material.dart';
 
-import 'search_cars.dart';
-class ClientNavigationScreen extends StatefulWidget {
+class OwnerNavigationScreen extends StatefulWidget {
+  const OwnerNavigationScreen({Key? key}) : super(key: key);
+
   @override
-  _ClientNavigationScreenState createState() => _ClientNavigationScreenState();
+  State<OwnerNavigationScreen> createState() => _OwnerNavigationScreenState();
 }
 
-class _ClientNavigationScreenState extends State<ClientNavigationScreen> {
+class _OwnerNavigationScreenState extends State<OwnerNavigationScreen> {
   int _currentIndex = 0;
-
   List<Widget> _screens = [
-    SearchCarsScreen(),
-    ReservationsClientScreen(),
-    RentsClientScreen(),
+    MyCarsScreen(),
+    ReservationsOwnerScreen(),
+    RentsOwnerScreen(),
     ProfileScreen()
   ];
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -43,7 +43,7 @@ class _ClientNavigationScreenState extends State<ClientNavigationScreen> {
             },
             items: [
               BottomNavigationBarItem(
-                icon: Icon(Icons.search,color: Color(0xFF527DAA)),
+                icon: Icon(Icons.car_rental,color: Color(0xFF527DAA)),
                 label: 'Search',
               ),
               BottomNavigationBarItem(

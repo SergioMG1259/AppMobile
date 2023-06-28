@@ -1,6 +1,10 @@
+import 'package:e_rent_car/screens/add-car.dart';
 import 'package:e_rent_car/screens/car-details-client.dart';
 import 'package:e_rent_car/screens/client.dart';
 import 'package:e_rent_car/screens/login.dart';
+import 'package:e_rent_car/screens/owner.dart';
+import 'package:e_rent_car/screens/profile.dart';
+import 'package:e_rent_car/screens/reservation-screen.dart';
 import 'package:flutter/material.dart';
 import 'package:e_rent_car/screens/register.dart';
 
@@ -19,7 +23,10 @@ class MyApp extends StatelessWidget {
         '/register': (context) => RegisterScreen(),
         '/login': (context) => LoginScreen(),
         '/client': (context) => ClientNavigationScreen(),
-        '/car-details-client':(context)=>CarDetailsClientScreen()
+        '/car-details-client':(context)=>CarDetailsClientScreen(),
+        '/reservation-screen':(context)=>ReservationScreen(),
+        '/owner': (context) => OwnerNavigationScreen(),
+        '/add-car': (context) => AddCarScreen(),
       },
     );
   }

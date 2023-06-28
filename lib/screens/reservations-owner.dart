@@ -1,23 +1,21 @@
-import 'package:e_rent_car/api-services/api-rent.dart';
-import 'package:e_rent_car/api-services/api-reservation.dart';
-import 'package:e_rent_car/models/global.dart';
 import 'package:flutter/material.dart';
 
-import '../models/reservation-client.dart';
+import '../api-services/api-reservation.dart';
+import '../models/global.dart';
+import '../models/reservation-owner.dart';
 
-class ReservationsClientScreen extends StatefulWidget {
-  const ReservationsClientScreen({Key? key}) : super(key: key);
+class ReservationsOwnerScreen extends StatefulWidget {
+  const ReservationsOwnerScreen({Key? key}) : super(key: key);
+
   @override
-  State<ReservationsClientScreen> createState() => _ReservationsClientScreenState();
+  State<ReservationsOwnerScreen> createState() => _ReservationsOwnerScreenState();
 }
 
-class _ReservationsClientScreenState extends State<ReservationsClientScreen> {
-  List<ReservationClient> reservations = [];
-  ApiReservationService apiReservationService=new ApiReservationService();
-  ApiRentService apiRentService=new ApiRentService();
+class _ReservationsOwnerScreenState extends State<ReservationsOwnerScreen> {
+  List<ReservationOwner> reservations = [];
 
+  ApiReservationService apiReservationService=new ApiReservationService();
   bool isLoading = true;
-  bool payed=false;
   @override
   void initState() {
     super.initState();
@@ -25,7 +23,7 @@ class _ReservationsClientScreenState extends State<ReservationsClientScreen> {
   }
   Future<void> fetchReservations() async {
     try {
-      final fetchedCars = await apiReservationService.getReservationsClient(Globals.userId);
+      final fetchedCars = await apiReservationService.getReservationsOwner(Globals.userId);
       setState(() {
         reservations = fetchedCars;
         isLoading = false;
@@ -34,12 +32,18 @@ class _ReservationsClientScreenState extends State<ReservationsClientScreen> {
       print(e);
     }
   }
-  Future<void> addRent(int reservationId) async {
+  Future<void> acceptReservation(int reservationId,int index) async {
     try {
-      final added = await apiRentService.pay(reservationId);
-      setState(() {
-        isLoading = false;
-      });
+      final fetchedCars = await apiReservationService.acceptReservation(reservationId);
+      reservations[index].state="ACCEPTED";
+    } catch (e) {
+      print(e);
+    }
+  }
+  Future<void> declineReservation(int reservationId, int index) async {
+    try {
+      final fetchedCars = await apiReservationService.declineReservation(reservationId);
+      reservations[index].state="DECLINED";
     } catch (e) {
       print(e);
     }
@@ -123,29 +127,50 @@ class _ReservationsClientScreenState extends State<ReservationsClientScreen> {
                           SizedBox(height: 20.0),
                           Row(
                             children: [
-                              if (reservations[index].state == 'ACCEPTED')
+                              Text(
+                                reservations[index].user.name+" "+reservations[index].user.lastName,
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              Icon(
+                                Icons.star,
+                                color: Color(0xFF527DAA),
+                              ),
+                              Text(
+                                reservations[index].user.score.toString()+'/5',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 20.0),
+                          Row(
+                            children: [
+                              if (reservations[index].state == 'WAITING')
                                 ElevatedButton(
                                   style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all<Color>(Color(
                                         0xFFD7095B)), // Color de fondo del botón
                                   ),
                                   onPressed: () {
+                                    setState(() {
+                                      declineReservation(reservations[index].id,index);
+                                    });
+                                    reservations[index].state='DECLINED';
                                   },
-                                  child: Text('Cancel'),
+                                  child: Text('Decline'),
                                 ),
                               SizedBox(width: 10.0),
-                              if (reservations[index].state == 'ACCEPTED')
+                              if (reservations[index].state == 'WAITING')
                                 ElevatedButton(
                                   style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF527DAA)), // Color de fondo del botón
                                   ),
                                   onPressed: () {
                                     setState(() {
-                                      addRent(reservations[index].id);
+                                      acceptReservation(reservations[index].id,index);
                                     });
-                                    reservations[index].state="PAYED";
+                                    reservations[index].state='ACCEPTED';
                                   },
-                                  child: Text('Pay'),
+                                  child: Text('Accept'),
                                 ),
                               SizedBox(width: 10.0),
                               ElevatedButton(
@@ -153,7 +178,7 @@ class _ReservationsClientScreenState extends State<ReservationsClientScreen> {
                                   backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF527DAA)), // Color de fondo del botón
                                 ),
                                 onPressed: () {
-                                  // Acción para dar una calificación
+
                                 },
                                 child: Text('View Details'),
                               ),
@@ -170,6 +195,5 @@ class _ReservationsClientScreenState extends State<ReservationsClientScreen> {
         ),
       );
     }
-
   }
 }

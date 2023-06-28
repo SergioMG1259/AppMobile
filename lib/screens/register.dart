@@ -296,6 +296,9 @@ class _RegisterScreen extends State<RegisterScreen> {
           if(_valueType=="Client")  {
             Navigator.pushNamed(context, '/client')
           }
+          else if(_valueType=="Owner"){
+            Navigator.pushNamed(context, '/owner')
+          }
         },
         style: ElevatedButton.styleFrom(
             elevation: 5.0,
