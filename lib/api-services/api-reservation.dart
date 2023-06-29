@@ -5,8 +5,8 @@ import 'dart:convert';
 import '../models/reservation-client.dart';
 
 class ApiReservationService {
-  /*static const String baseUrl = 'http://192.168.100.5:8105/api/v1';*/
-  static const String baseUrl = 'https://api-erentcar.azurewebsites.net/api/v1';
+  static const String baseUrl = 'http://192.168.100.5:8105/api/v1';
+  /*static const String baseUrl = 'https://api-erentcar.azurewebsites.net/api/v1';*/
 
   Future<List<ReservationClient>> getReservationsClient(int id) async {
     final url = Uri.parse('$baseUrl/reservations/client/$id');
